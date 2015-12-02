@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import <AVFoundation/AVFoundation.h>
 #import <CoreGraphics/CoreGraphics.h>
+#import <QuartzCore/QuartzCore.h>
 
 #define kWidth ([UIScreen mainScreen].bounds.size.width)
 #define kHeight ([UIScreen mainScreen].bounds.size.height)
