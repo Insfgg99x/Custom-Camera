@@ -14,9 +14,10 @@
 		E8262E161C0D533100544796 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E8262E151C0D533100544796 /* Images.xcassets */; };
 		E8262E191C0D533100544796 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E8262E171C0D533100544796 /* LaunchScreen.xib */; };
 		E8262E251C0D533100544796 /* _____Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E8262E241C0D533100544796 /* _____Tests.m */; };
-		E846FEA81C0D779E00A4D834 /* camera_h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E846FEA51C0D779E00A4D834 /* camera_h@2x.png */; };
-		E846FEA91C0D779E00A4D834 /* camera@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E846FEA61C0D779E00A4D834 /* camera@2x.png */; };
-		E846FEAA1C0D779E00A4D834 /* sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E846FEA71C0D779E00A4D834 /* sound.mp3 */; };
+		E83A559E1C1567B300404FF7 /* camera@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E83A559A1C1567B300404FF7 /* camera@2x.png */; };
+		E83A559F1C1567B300404FF7 /* camera_h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E83A559B1C1567B300404FF7 /* camera_h@2x.png */; };
+		E83A55A01C1567B300404FF7 /* shift@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E83A559C1C1567B300404FF7 /* shift@2x.png */; };
+		E83A55A11C1567B300404FF7 /* sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E83A559D1C1567B300404FF7 /* sound.mp3 */; };
 		E846FEAC1C0D8D9800A4D834 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E846FEAB1C0D8D9800A4D834 /* AVFoundation.framework */; };
 		E846FEAE1C0D8D9D00A4D834 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E846FEAD1C0D8D9D00A4D834 /* CoreGraphics.framework */; };
 /* End PBXBuildFile section */
@@ -45,9 +46,10 @@
 		E8262E1E1C0D533100544796 /* 自定义相机Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "自定义相机Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8262E231C0D533100544796 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E8262E241C0D533100544796 /* _____Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "_____Tests.m"; sourceTree = "<group>"; };
-		E846FEA51C0D779E00A4D834 /* camera_h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_h@2x.png"; sourceTree = "<group>"; };
-		E846FEA61C0D779E00A4D834 /* camera@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera@2x.png"; sourceTree = "<group>"; };
-		E846FEA71C0D779E00A4D834 /* sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sound.mp3; sourceTree = "<group>"; };
+		E83A559A1C1567B300404FF7 /* camera@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera@2x.png"; sourceTree = "<group>"; };
+		E83A559B1C1567B300404FF7 /* camera_h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_h@2x.png"; sourceTree = "<group>"; };
+		E83A559C1C1567B300404FF7 /* shift@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shift@2x.png"; sourceTree = "<group>"; };
+		E83A559D1C1567B300404FF7 /* sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sound.mp3; sourceTree = "<group>"; };
 		E846FEAB1C0D8D9800A4D834 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		E846FEAD1C0D8D9D00A4D834 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -75,8 +77,8 @@
 		E8262DFC1C0D533100544796 = {
 			isa = PBXGroup;
 			children = (
-				E846FEAD1C0D8D9D00A4D834 /* CoreGraphics.framework */,
-				E846FEAB1C0D8D9800A4D834 /* AVFoundation.framework */,
+				E83A55A21C1567CD00404FF7 /* Framework */,
+				E83A55991C1567B300404FF7 /* Resource */,
 				E8262E071C0D533100544796 /* 自定义相机 */,
 				E8262E211C0D533100544796 /* 自定义相机Tests */,
 				E8262E061C0D533100544796 /* Products */,
@@ -95,9 +97,6 @@
 		E8262E071C0D533100544796 /* 自定义相机 */ = {
 			isa = PBXGroup;
 			children = (
-				E846FEA51C0D779E00A4D834 /* camera_h@2x.png */,
-				E846FEA61C0D779E00A4D834 /* camera@2x.png */,
-				E846FEA71C0D779E00A4D834 /* sound.mp3 */,
 				E8262E0C1C0D533100544796 /* AppDelegate.h */,
 				E8262E0D1C0D533100544796 /* AppDelegate.m */,
 				E8262E0F1C0D533100544796 /* ViewController.h */,
@@ -134,6 +133,28 @@
 				E8262E231C0D533100544796 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E83A55991C1567B300404FF7 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				E83A559A1C1567B300404FF7 /* camera@2x.png */,
+				E83A559B1C1567B300404FF7 /* camera_h@2x.png */,
+				E83A559C1C1567B300404FF7 /* shift@2x.png */,
+				E83A559D1C1567B300404FF7 /* sound.mp3 */,
+			);
+			name = Resource;
+			path = "自定义相机/Resource";
+			sourceTree = "<group>";
+		};
+		E83A55A21C1567CD00404FF7 /* Framework */ = {
+			isa = PBXGroup;
+			children = (
+				E846FEAD1C0D8D9D00A4D834 /* CoreGraphics.framework */,
+				E846FEAB1C0D8D9800A4D834 /* AVFoundation.framework */,
+			);
+			name = Framework;
+			path = "自定义相机/Framework";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -216,11 +237,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E846FEA81C0D779E00A4D834 /* camera_h@2x.png in Resources */,
-				E846FEA91C0D779E00A4D834 /* camera@2x.png in Resources */,
+				E83A559F1C1567B300404FF7 /* camera_h@2x.png in Resources */,
+				E83A55A01C1567B300404FF7 /* shift@2x.png in Resources */,
+				E83A55A11C1567B300404FF7 /* sound.mp3 in Resources */,
+				E83A559E1C1567B300404FF7 /* camera@2x.png in Resources */,
 				E8262E141C0D533100544796 /* Main.storyboard in Resources */,
 				E8262E191C0D533100544796 /* LaunchScreen.xib in Resources */,
-				E846FEAA1C0D779E00A4D834 /* sound.mp3 in Resources */,
 				E8262E161C0D533100544796 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

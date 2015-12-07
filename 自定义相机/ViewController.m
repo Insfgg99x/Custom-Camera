@@ -89,11 +89,16 @@ static float kCameraScale=1.0;
 -(void)ceateUI
 {
     //拍照按钮
-    _shutterBtn=[[UIButton alloc]initWithFrame:CGRectMake(20, kHeight-60, 36, 48)];
+    _shutterBtn=[[UIButton alloc]initWithFrame:CGRectMake(kWidth-50, kHeight-60, 30, 40)];
     [_shutterBtn setImage:[UIImage imageNamed:@"camera"] forState:UIControlStateNormal];
     [_shutterBtn setImage:[UIImage imageNamed:@"camera_h"] forState:UIControlStateHighlighted];
     [self.view addSubview:_shutterBtn];
     [_shutterBtn addTarget:self action:@selector(shutter) forControlEvents:UIControlEventTouchUpInside];
+    _shutterBtn.backgroundColor=[UIColor colorWithWhite:0.8 alpha:0.8];
+    _shutterBtn.layer.cornerRadius=10;
+    _shutterBtn.imageEdgeInsets=UIEdgeInsetsMake(10, 5, 10, 5);
+    _shutterBtn.layer.borderColor=[UIColor whiteColor].CGColor;
+    _shutterBtn.layer.borderWidth=1;
     
     //对焦十字
     _focalReticule=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 60, 60)];
@@ -118,10 +123,10 @@ static float kCameraScale=1.0;
 -(void)createFunctionalUI
 {
     //1x 2x 3x 4x焦距按钮
-    _focalBtn=[[UIButton alloc]initWithFrame:CGRectMake(20, kHeight-110, 48, 36)];
-    [_focalBtn setTitle:@"1x" forState:UIControlStateNormal];
+    _focalBtn=[[UIButton alloc]initWithFrame:CGRectMake(20, kHeight-110, 40, 30)];
+    [_focalBtn setTitle:@"1X" forState:UIControlStateNormal];
     [_focalBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    _focalBtn.backgroundColor=[UIColor clearColor];
+    _focalBtn.backgroundColor=[UIColor colorWithWhite:0.8 alpha:0.8];
     _focalBtn.layer.cornerRadius=10;
     _focalBtn.layer.borderColor=[UIColor whiteColor].CGColor;
     _focalBtn.layer.borderWidth=1.0;
@@ -131,6 +136,98 @@ static float kCameraScale=1.0;
     CGRect frame=_focalBtn.frame;
     frame.origin.x=_shutterBtn.frame.origin.x;
     _focalBtn.frame=frame;
+    
+    //闪光灯开启关闭按钮
+    UIButton *flashBtn=[[UIButton alloc]initWithFrame:CGRectMake(CGRectGetMinX(_shutterBtn.frame), 20, 40, 30)];
+    flashBtn.transform=CGAffineTransformMakeRotation(M_PI_2);
+    [flashBtn setTitle:@"⚡️关" forState:UIControlStateNormal];
+    [flashBtn setTitle:@"⚡️开" forState:UIControlStateSelected];
+    [flashBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    flashBtn.titleLabel.font=[UIFont systemFontOfSize:12];
+    flashBtn.backgroundColor=[UIColor colorWithWhite:0.8 alpha:0.8];
+    flashBtn.layer.cornerRadius=10;
+    flashBtn.layer.borderColor=[UIColor whiteColor].CGColor;
+    flashBtn.layer.borderWidth=1;
+    [self.view addSubview:flashBtn];
+    [flashBtn addTarget:self action:@selector(flasAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+    //切换前后摄像头
+    UIButton *shiftBtn=[[UIButton alloc]initWithFrame:CGRectMake(CGRectGetMinX(_shutterBtn.frame), 80, 40, 30)];
+    shiftBtn.transform=CGAffineTransformMakeRotation(M_PI_2);
+    [shiftBtn setImage:[UIImage imageNamed:@"shift"] forState:UIControlStateNormal];
+    shiftBtn.imageEdgeInsets=UIEdgeInsetsMake(5, 10, 5, 10);
+    [shiftBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    shiftBtn.titleLabel.font=[UIFont systemFontOfSize:12];
+    shiftBtn.backgroundColor=[UIColor colorWithWhite:0.8 alpha:0.8];
+    shiftBtn.layer.cornerRadius=10;
+    shiftBtn.layer.borderColor=[UIColor whiteColor].CGColor;
+    shiftBtn.layer.borderWidth=1;
+    [self.view addSubview:shiftBtn];
+    [shiftBtn addTarget:self action:@selector(shiftCamera:) forControlEvents:UIControlEventTouchUpInside];
+}
+//切换前后相机
+-(void)shiftCamera:(UIButton *)sender
+{
+    sender.selected=!sender.isSelected;
+    //切换至前置摄像头
+    if(sender.isSelected)
+    {
+        AVCaptureDevice *device=nil;
+        NSArray *devices=[AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+        for(AVCaptureDevice *tmp in devices)
+        {
+            if(tmp.position==AVCaptureDevicePositionFront)
+                device=tmp;
+        }
+        [_session beginConfiguration];
+        [_session removeInput:_input];
+        _input=nil;
+        _input=[[AVCaptureDeviceInput alloc]initWithDevice:device error:nil];
+        if([_session canAddInput:_input])
+            [_session addInput:_input];
+        [_session commitConfiguration];
+    }
+    //切换至后置摄像头
+    else
+    {
+        AVCaptureDevice *device=nil;
+        NSArray *devices=[AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+        for(AVCaptureDevice *tmp in devices)
+        {
+            if(tmp.position==AVCaptureDevicePositionBack)
+                device=tmp;
+        }
+        [_session beginConfiguration];
+        [_session removeInput:_input];
+        _input=nil;
+        _input=[[AVCaptureDeviceInput alloc]initWithDevice:device error:nil];
+        if([_session canAddInput:_input])
+            [_session addInput:_input];
+        [_session commitConfiguration];
+    }
+}
+//闪光灯按钮的操作
+-(void)flasAction:(UIButton *)sender
+{
+    sender.selected=!sender.isSelected;
+    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    if ([device hasTorch] && [device hasFlash])
+    {
+        [device lockForConfiguration:nil];
+        //闪光灯开
+        if (sender.isSelected)
+        {
+            [device setFlashMode:AVCaptureFlashModeOn];
+        }
+        //闪光灯关
+        else
+        {
+            [device setFlashMode:AVCaptureFlashModeOff];
+        }
+        //闪光灯自动，这里就不写了，可以自己尝试
+        //[device setFlashMode:AVCaptureFlashModeAuto];
+        [device unlockForConfiguration];
+    }
 }
 //调整焦距
 -(void)adjustFocalDistance:(UIButton *)sender
@@ -142,7 +239,7 @@ static float kCameraScale=1.0;
     AVCaptureConnection *connect=[_output connectionWithMediaType:AVMediaTypeVideo];
     [CATransaction begin];
     [CATransaction setAnimationDuration:0.2];
-    [_focalBtn setTitle:[NSString stringWithFormat:@"%dx",(int)kCameraScale] forState:UIControlStateNormal];
+    [_focalBtn setTitle:[NSString stringWithFormat:@"%dX",(int)kCameraScale] forState:UIControlStateNormal];
     [_previewLayer setAffineTransform:CGAffineTransformMakeScale(kCameraScale, kCameraScale)];
     connect.videoScaleAndCropFactor=kCameraScale;
     [CATransaction commit];
@@ -150,6 +247,8 @@ static float kCameraScale=1.0;
 //对焦
 -(void)foucus:(UITapGestureRecognizer *)sender
 {
+    if(_input.device.position==AVCaptureDevicePositionFront)
+        return;
     if(sender.state==UIGestureRecognizerStateRecognized)
     {
         CGPoint location=[sender locationInView:self.view];
@@ -202,13 +301,14 @@ static float kCameraScale=1.0;
             }
             
             [device unlockForConfiguration];
-            
-            completionHandler();
+            if(completionHandler)
+                completionHandler();
         }
     }
     else
     {
-        completionHandler();
+        if(completionHandler)
+            completionHandler();
     }
 }
 //拍照
@@ -226,49 +326,51 @@ static float kCameraScale=1.0;
             return;
         NSData *imageData=[AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
         UIImage *image=[UIImage imageWithData:imageData];
-        [self shutterSuccessAlert];
-        //注意：正常情况，直接保存至相册就ok，这个方法下面的三个方法都可以不写。
-        //我这里是为了要在图片上添加经纬度信息，海拔高度等，所以单独用imageView显示出来。
-        //因此，接下来的三个方法你可以直接删去。
-        //UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
-        //显示拍到的图片
-        [weakSelf showCapturedImageOnScreen:image];
-        
+        [weakSelf shutterSuccessAlert];
+        [weakSelf showCapturedImage:image];
     }];
 }
-//显示拍取的照片
--(void)showCapturedImageOnScreen:(UIImage *)capturedImage
+//显示拍摄到的照片
+-(void)showCapturedImage:(UIImage *)image
 {
     UIImageView *imv=[[UIImageView alloc]initWithFrame:self.view.bounds];
-    imv.image=capturedImage;
+    imv.image=image;
+    if(_input.device.position==AVCaptureDevicePositionFront)
+        imv.transform=CGAffineTransformMakeRotation(M_PI);
     [self.view addSubview:imv];
     imv.userInteractionEnabled=YES;
-    //需要在照片上添加经纬度，海拔，方位角，水平角，俯仰角，焦距放大倍率等信息，然后截取屏幕
-    
-    UIButton *cancelBtn=[[UIButton alloc]initWithFrame:CGRectMake(20, 100, 60, 40)];
+    CGFloat xpos=20;
+    CGFloat ypos=100;
+    if(_input.device.position==AVCaptureDevicePositionFront)
+    {
+        xpos=kWidth-80;
+        ypos=kHeight-100;
+    }
+    UIButton *cancelBtn=[[UIButton alloc]initWithFrame:CGRectMake(xpos, ypos, 60, 40)];
     [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
     [cancelBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    cancelBtn.backgroundColor=[UIColor clearColor];
+    cancelBtn.backgroundColor=[UIColor colorWithWhite:0.8 alpha:0.8];
     cancelBtn.layer.cornerRadius=5;
     cancelBtn.layer.borderColor=[UIColor whiteColor].CGColor;
     cancelBtn.layer.borderWidth=1.0;
     [cancelBtn addTarget:self action:@selector(cancel:) forControlEvents:UIControlEventTouchUpInside];
-    cancelBtn.transform=CGAffineTransformMakeRotation(M_PI_2);
+    CGFloat raduis=M_PI_2;
+    if(_input.device.position==AVCaptureDevicePositionFront)
+        raduis=M_PI_2*3;
+    cancelBtn.transform=CGAffineTransformMakeRotation(raduis);
     [imv addSubview:cancelBtn];
-    
-    
-    UIButton *saveBtn=[[UIButton alloc]initWithFrame:CGRectMake(20, kHeight-100, 60, 40)];
+    UIButton *saveBtn=[[UIButton alloc]initWithFrame:CGRectMake(xpos, kHeight-ypos, 60, 40)];
     [saveBtn setTitle:@"保存" forState:UIControlStateNormal];
     [saveBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    saveBtn.backgroundColor=[UIColor clearColor];
+    saveBtn.backgroundColor=[UIColor colorWithWhite:0.8 alpha:0.8];
     saveBtn.layer.cornerRadius=5;
     saveBtn.layer.borderColor=[UIColor whiteColor].CGColor;
     saveBtn.layer.borderWidth=1.0;
     [saveBtn addTarget:self action:@selector(save:) forControlEvents:UIControlEventTouchUpInside];
-    saveBtn.transform=CGAffineTransformMakeRotation(M_PI_2);
+    saveBtn.transform=CGAffineTransformMakeRotation(raduis);
     [imv addSubview:saveBtn];
-}
 
+}
 //取消
 -(void)cancel:(UIButton *)sender
 {
@@ -278,18 +380,8 @@ static float kCameraScale=1.0;
 -(void)save:(UIButton *)sender
 {
     UIImageView *imv=(UIImageView *)sender.superview;
-    
-    for(UIView *sub in sender.superview.subviews)
-    {
-        if([sub isKindOfClass:[UIButton class]])
-            [sub removeFromSuperview];
-    }
-    UIGraphicsBeginImageContextWithOptions(imv.bounds.size, NO, 0.0);
-    [imv.layer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *currentImage=UIGraphicsGetImageFromCurrentImageContext();
-    //保存图片
-    UIImageWriteToSavedPhotosAlbum(currentImage, nil, nil, nil);
-    UIGraphicsEndImageContext();
+    //保存到相册
+    UIImageWriteToSavedPhotosAlbum(imv.image, nil, nil, nil);
     [imv removeFromSuperview];
 }
 //播放拍照音效
