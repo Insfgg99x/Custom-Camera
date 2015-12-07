@@ -166,11 +166,11 @@ static float kCameraScale=1.0;
 -(void)shiftCamera:(UIButton *)sender
 {
     sender.selected=!sender.isSelected;
+    AVCaptureDevice *device=nil;
+    NSArray *devices=[AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
     //切换至前置摄像头
     if(sender.isSelected)
     {
-        AVCaptureDevice *device=nil;
-        NSArray *devices=[AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
         for(AVCaptureDevice *tmp in devices)
         {
             if(tmp.position==AVCaptureDevicePositionFront)
@@ -187,8 +187,6 @@ static float kCameraScale=1.0;
     //切换至后置摄像头
     else
     {
-        AVCaptureDevice *device=nil;
-        NSArray *devices=[AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
         for(AVCaptureDevice *tmp in devices)
         {
             if(tmp.position==AVCaptureDevicePositionBack)
