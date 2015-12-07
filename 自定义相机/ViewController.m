@@ -20,7 +20,6 @@
 @property(nonatomic,strong)AVCaptureDeviceInput *input;
 @property(nonatomic,strong)AVCaptureStillImageOutput *output;
 @property(nonatomic,strong)AVCaptureVideoPreviewLayer *previewLayer;
-@property(nonatomic,strong)UIView *cameraView;
 //拍照
 @property(nonatomic,strong)UIButton *shutterBtn;
 //对焦
@@ -77,13 +76,11 @@ static float kCameraScale=1.0;
 //初始化相机预览层
 -(void)initCameraLayer
 {
-    _cameraView=[[UIView alloc]initWithFrame:self.view.bounds];
-    [self.view addSubview:_cameraView];
     _previewLayer=[[AVCaptureVideoPreviewLayer alloc]initWithSession:_session];
-    [_cameraView.layer setMasksToBounds:YES];
-    [self.previewLayer setFrame:_cameraView.bounds];
+    //self.view.layer.masksToBounds=YES;
+    [self.previewLayer setFrame:self.view.bounds];
     [self.previewLayer setVideoGravity:AVLayerVideoGravityResizeAspect];
-    [_cameraView.layer insertSublayer:self.previewLayer below:[[_cameraView.layer sublayers] objectAtIndex:0]];
+    [self.view.layer addSublayer:_previewLayer];
 }
 //搭建UI
 -(void)ceateUI
